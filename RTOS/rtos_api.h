@@ -30,7 +30,7 @@ enum { EventName = 1 << id }
 void ActivateTask(TTaskId entry,int priority, const char* name);
 void TerminateTask(void);
 
-int StartOS(TTaskId entry,int priority, const char* name, TMessage logLevel);
+int StartOS(TTaskId entry,int priority, const char* name, TMessage LogLevel);
 void ShutdownOS();
 
 void InitResource(TResourceId id);

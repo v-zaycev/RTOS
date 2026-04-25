@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 4.3)
 project(RTOS VERSION 1.0)   # ← язык определяется автоматически
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_C_STANDARD 99)               # ← C99 стандарт
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+# Если нужны расширения (опционально)
+set(CMAKE_C_EXTENSIONS OFF)
 
 # ============================================
 # Указываем директорию с исходниками (если не в корне)
@@ -16,12 +19,11 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 # Исходные файлы (проверьте имена!)
 # ============================================
 set(RTOS_SOURCES
-    ${SOURCE_DIR}/os.cpp
-    ${SOURCE_DIR}/task.cpp
-    ${SOURCE_DIR}/resource.cpp
-    ${SOURCE_DIR}/event.cpp      # если есть
-    ${SOURCE_DIR}/global.cpp
-    ${SOURCE_DIR}/switch_context.asm 
+    ${SOURCE_DIR}/os.c
+    ${SOURCE_DIR}/task.c
+    ${SOURCE_DIR}/resource.c
+    "event.c"      # если есть
+    ${SOURCE_DIR}/global.c
 )
 
 set(RTOS_HEADERS
@@ -47,5 +49,5 @@ target_include_directories(rtos PUBLIC ${SOURCE_DIR})
 # ============================================
 # Тестовый исполняемый файл
 # ============================================
-add_executable(rtos_test ${SOURCE_DIR}/test.cpp)
+add_executable(rtos_test ${SOURCE_DIR}/test.c)
 target_link_libraries(rtos_test rtos)

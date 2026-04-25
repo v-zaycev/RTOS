@@ -16,7 +16,7 @@ typedef enum {
 
 typedef enum {
   message_info,
-  message_log,
+  message_Log,
   message_warning,
   message_error
 } TMessage;
@@ -83,9 +83,9 @@ void Schedule(int task);
 
 void Dispatch();
 
-bool ReadyResources(int task);
+int ReadyResources(int task);
 
-bool ReadyEvents(int task);
+int ReadyEvents(int task);
 
 void EmptyTask(TTask* task);
 
@@ -97,7 +97,7 @@ void AddTaskToWaitlist(int task_id, int resource_id);
 
 void RemoveTaskFromQueue(int task_id);
 
-void log(const char* format, TMessage type, ...);
+void Log(const char* format, TMessage type, ...);
 
 int checkTaskId(TTaskId id);
 
