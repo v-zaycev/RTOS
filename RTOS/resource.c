@@ -29,10 +29,8 @@ void InitResource(TResourceId id)
 	Log("InitResource %d", message_info, id);
 
 	OSData.Resources[free_place].id = id;
-	OSData.Resources[free_place].original_priority = 1;
 	OSData.Resources[free_place].owner = -1;
 	OSData.Resources[free_place].WaitingListHead = -1;
-	OSData.Resources[free_place].waiting_count = 0;
 
 	for (int i = 0; i < MAX_TASK; ++i)
 	{
@@ -59,7 +57,7 @@ void GetResource(TResourceId id)
 
 	if (res_pos == -1)
 	{
-		Log("Resource %d wasn't created, task will be terminated\n", message_error, id);
+		Log("Resource %d wasn't created, task will be terminated", message_error, id);
 		TerminateTask();
 	}
 

@@ -7,7 +7,6 @@
 #include "sys.h"
 #include "rtos_api.h"
 
-//нужно добавить запрет повторной активации задачи
 void ActivateTask(TTaskId entry,int priority,const char* name)
 {
 	Log("ActivateTask \"%s\"", message_info, name);
@@ -49,16 +48,19 @@ void ActivateTask(TTaskId entry,int priority,const char* name)
 
 void TerminateTask(void)
 {
+	for (int i = 0; i < OSData.ResourcesCount; ++i)
+	{
+		if (OSData.Resources[i].owner == OSData.RunningTask)
+		{
+			Log("TerminateTask can't be finished, Task owned 1 or more Resources", message_error);
+			return;
+		}
+	}
+
 	int cur_task = OSData.RunningTask;
 	OSData.RunningTask = -1;
 
-	// считаем что в конце занятых ресурсов нет
-	//for (int i = 0; i < OSData.Tasks[cur_task].locked_count; ++i)
-	//{
-	//	
-	//}
-
-	Log("TerminateTask %s", message_info, OSData.Tasks[cur_task].name);
+	Log("TerminateTask \"%s\"", message_info, OSData.Tasks[cur_task].name);
 
 	EmptyTask(OSData.Tasks + cur_task);
 
@@ -119,8 +121,6 @@ void Schedule(int task_id)
 			OSData.TasksQueue[free_slot].data = task_id;
 		}
 	}
-
-	// printf("-- End of Schedule %s\n", OSData.Tasks[task_id].name);
 }
 
 void Dispatch()
@@ -168,7 +168,7 @@ void Dispatch()
 			OSData.Tasks[OSData.RunningTask].status = task_running;
 			OSData.stack = OSData.Tasks[OSData.RunningTask].stack;
 		}
-		Log("Running task %s", message_info, OSData.Tasks[OSData.RunningTask].name);
+		Log("Running task \"%s\"", message_info, OSData.Tasks[OSData.RunningTask].name);
 		if (OSData.Tasks[OSData.RunningTask].jmp_flag == -1)
 		{
 			OSData.Tasks[OSData.RunningTask].jmp_flag = 0;
@@ -182,7 +182,7 @@ void Dispatch()
 	}
 	if (OSData.RunningTask != -1)
 	{
-		Log("Running task %s", message_info, OSData.Tasks[OSData.RunningTask].name);
+		Log("Running task \"%s\"", message_info, OSData.Tasks[OSData.RunningTask].name);
 	}
 	else
 	{

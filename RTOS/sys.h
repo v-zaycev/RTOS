@@ -55,11 +55,9 @@ typedef struct {
 
 typedef struct {
   TResourceId id;
-  int owner;                       // индекс задачи-владельца (-1 если свободен)
-  int original_priority;           // приоритет владельца до наследования
+  int owner;
   int WaitingListHead;
-  ListNode WaitingQueue[MAX_TASK];     // очередь заблокированных задач
-  int waiting_count;               // количество задач в очереди
+  ListNode WaitingQueue[MAX_TASK];
 } TResource;
 
 typedef struct {

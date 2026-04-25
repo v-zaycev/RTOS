@@ -22,13 +22,15 @@ set(RTOS_SOURCES
     ${SOURCE_DIR}/os.c
     ${SOURCE_DIR}/task.c
     ${SOURCE_DIR}/resource.c
-    "event.c"      # если есть
+    ${SOURCE_DIR}/event.c
     ${SOURCE_DIR}/global.c
+    ${SOURCE_DIR}/utils.c
 )
 
 set(RTOS_HEADERS
     ${SOURCE_DIR}/rtos_api.h
-    ${SOURCE_DIR}/sys.h        # если есть
+    ${SOURCE_DIR}/sys.h
+    ${SOURCE_DIR}/defs.h
 )
 
 # ============================================

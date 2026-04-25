@@ -92,22 +92,25 @@ DeclareTask(Task31_7, 1);
 DeclareTask(Task32_7, 1);
 DeclareTask(Task33_7, 1);
 
-void RunTest(const char* test_name, TTaskId start_task, int priority, const char* task_name) {
+DeclareTask(Task1_8, 1);
+
+void RunTest(const char* test_name, TTaskId start_task, int priority, const char* task_name, TMessage log_level) {
 	printf("========== Running test: %s ==========\n", test_name);
-	StartOS(start_task, priority, task_name, message_warning);
+	StartOS(start_task, priority, task_name, log_level);
 	ShutdownOS();
 	printf("========== Test %s completed ==========\n\n", test_name);
 }
 
 int main(void)
 {
-	RunTest("Test1", Task1_1, Task1_1_PRIORITY, "Task1");
-	RunTest("Test2", Task1_2, Task1_2_PRIORITY, "Task1");
-	RunTest("Test3", Task1_3, Task1_3_PRIORITY, "Task1");
-	RunTest("Test4", Task1_4, Task1_4_PRIORITY, "Task1");
-	RunTest("Test5", Task1_5, Task1_5_PRIORITY, "Task1");
-	RunTest("Test6", Task1_6, Task1_6_PRIORITY, "Task1");
-	RunTest("Test7", Task1_7, Task1_7_PRIORITY, "Task1");
+	RunTest("Test1", Task1_1, Task1_1_PRIORITY, "Task1", message_info);
+	RunTest("Test2", Task1_2, Task1_2_PRIORITY, "Task1", message_info);
+	RunTest("Test3", Task1_3, Task1_3_PRIORITY, "Task1", message_info);
+	RunTest("Test4", Task1_4, Task1_4_PRIORITY, "Task1", message_info);
+	RunTest("Test5", Task1_5, Task1_5_PRIORITY, "Task1", message_info);
+	RunTest("Test6", Task1_6, Task1_6_PRIORITY, "Task1", message_warning);
+	RunTest("Test7", Task1_7, Task1_7_PRIORITY, "Task1", message_warning);
+	RunTest("Test8", Task1_8, Task1_8_PRIORITY, "Task1", message_info);
 	return 0;
 }
 
@@ -657,5 +660,18 @@ TASK(Task32_7)
 TASK(Task33_7)
 {
 	printf("Task33 completed\n");
+	TerminateTask();
+}
+
+// Test 8
+
+TASK(Task1_8)
+{
+	printf("Task1 start\n");
+	SYSCALL(InitResource(Res1));
+	SYSCALL(GetResource(Res1));
+	TerminateTask();
+	SYSCALL(ReleaseResource(Res1));
+	printf("Task1 finish\n");
 	TerminateTask();
 }
