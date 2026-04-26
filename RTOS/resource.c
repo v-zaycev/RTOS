@@ -58,12 +58,13 @@ void GetResource(TResourceId id)
 	if (res_pos == -1)
 	{
 		Log("Resource %d wasn't created, task will be terminated", message_error, id);
-		TerminateTask();
+		return;
 	}
 
 	if (OSData.Resources[res_pos].owner == -1)
 	{
 		OSData.Resources[res_pos].owner = OSData.RunningTask;
+		Log("Task %s get Resource %d", message_info, OSData.Tasks[OSData.RunningTask].name, id);
 		return;
 	}
 
@@ -74,7 +75,7 @@ void GetResource(TResourceId id)
 	int owner = OSData.Resources[res_pos].owner;
 	int owner_priority = OSData.Tasks[owner].current_priority;
 	int max_priority = GetMaxPriority(owner);
-	
+
 	if (owner_priority < max_priority)
 	{
 		OSData.Tasks[owner].current_priority = max_priority;
@@ -84,7 +85,7 @@ void GetResource(TResourceId id)
 			Schedule(owner);
 		}
 	}
-
+	Log("Task %s wait Resource %d", message_info, OSData.Tasks[owner].name, id);
 	Dispatch();
 }
 
@@ -114,8 +115,8 @@ void ReleaseResource(TResourceId id)
 	}
 
 
-	Log("ReleaseResource %d", message_info, id);
-	
+	Log("Task %s release Resource %d", message_info, OSData.Tasks[OSData.RunningTask].name, id);
+
 	OSData.Resources[res_pos].owner = -1;
 
 	if (OSData.Resources[res_pos].WaitingListHead != -1)
@@ -129,6 +130,7 @@ void ReleaseResource(TResourceId id)
 		OSData.Resources[res_pos].owner = top_waiter;
 		OSData.Tasks[top_waiter].status = task_ready;
 		Schedule(top_waiter);
+		Log("Task %s get Resource %d", message_info, OSData.Tasks[top_waiter].name, id);
 	}
 
 	int current_priority = OSData.Tasks[OSData.RunningTask].current_priority;
